@@ -67,19 +67,23 @@ def validate(data):
     """
     valid_records = []
     error_count = 0
-
+    dropped_records = []
     for record in data:
         if record.get('price', 0) <= 0:
+            dropped_records.append({"id": record.get('id'), "reason": "Price <= 0"})
             error_count += 1; 
             continue
         
         if not record.get('category') :
+            dropped_records.append({"id": record.get('id'), "reason": "Missing Category"})
             error_count += 1; 
             continue 
 
         valid_records.append(record)
 
     print(f"Validation complete. Valid: {len(valid_records)}, Errors: {error_count}")
+    if dropped_records:
+        print(f"Errors found: {dropped_records}")
     return valid_records
 
 
